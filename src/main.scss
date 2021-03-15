@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 'PingFang-SC-Regular';
+  src: url('./assets/font/PingFang-SC-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Helvetica';
+  src: url('./assets/font/Helvetica.ttf');
+}
+
+body {
+  margin: 0;
+  font-family: 'Helvetica', 'PingFang-SC-Regular';
+}
