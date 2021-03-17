@@ -9,6 +9,9 @@
     "url": "https://github.com/zhch-hong"
   },
   "description": "Electron工具",
+  "repository": {
+    "url": "https://github.com/zhch-hong/util-app.git"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -19,10 +22,20 @@
     "postuninstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "electron-log": "^4.3.2",
+    "electron-store": "^7.0.2",
+    "electron-updater": "^4.3.8",
     "element-plus": "^1.0.2-beta.28",
+    "exceljs": "^4.2.1",
+    "lodash": "^4.17.21",
+    "mousetrap": "^1.6.5",
+    "uuid": "^8.3.2",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.0-0"
+    "vuedraggable": "^4.0.1",
+    "vuex": "^4.0.0-0",
+    "vxe-table": "^4.0.3",
+    "xe-utils": "^3.1.11"
   },
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.2.0",
