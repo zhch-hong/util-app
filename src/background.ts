@@ -5,6 +5,8 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension from 'electron-devtools-installer';
 import getWorkFolder from '@/app/work-folder';
 import configFiles from '@/app/config-files';
+import fs from 'fs';
+import path from 'path';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -12,16 +14,26 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }]);
 
 async function createWindow() {
+  fs.writeFile(path.resolve(__dirname, '../process_env.json'), JSON.stringify(process.env), (e) => {
+    console.log(e);
+  });
+
   // Create the browser window.
   const win = new BrowserWindow({
     width: 1632,
     height: 918,
     webPreferences: {
-      // https://nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration
-      nodeIntegration: (process.env.ELECTRON_NODE_INTEGRATION as unknown) as boolean,
-      // https://github.com/electron/electron/blob/master/docs/breaking-changes.md#planned-breaking-api-changes-120
-      // https://github.com/electron/electron/blob/master/docs/tutorial/security.md#3-enable-context-isolation-for-remote-content
+      /**
+       * https://nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration
+       */
+      nodeIntegration: true,
+
+      /**
+       * https://github.com/electron/electron/blob/master/docs/breaking-changes.md#planned-breaking-api-changes-120
+       * https://github.com/electron/electron/blob/master/docs/tutorial/security.md#3-enable-context-isolation-for-remote-content
+       */
       contextIsolation: false,
+
       enableRemoteModule: true,
     },
   });
