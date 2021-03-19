@@ -1,9 +1,16 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 
+import Task from '@/views/task/task.vue';
+import Sync from '@/views/sync/sync.vue';
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    component: () => import('@/views/task/task.vue'),
+    component: Task,
+  },
+  {
+    path: '/sync',
+    component: Sync,
   },
 ];
 
