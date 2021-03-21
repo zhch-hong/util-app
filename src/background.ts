@@ -3,49 +3,15 @@
 import { app, protocol, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension from 'electron-devtools-installer';
-import getWorkFolder from '@/app/work-folder';
-import configFiles from '@/app/config-files';
 import fs from 'fs';
 import path from 'path';
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
-const template: MenuItemConstructorOptions[] = [
-  {
-    label: '文件',
-    submenu: [
-      {
-        label: '选项',
-        submenu: [
-          {
-            label: 'xxx',
-          },
-          {
-            label: 'xxx===',
-          },
-        ],
-      },
-      {
-        type: 'separator',
-      },
-      {
-        label: '退出',
-        click: () => app.quit(),
-      },
-    ],
-  },
-  {
-    label: '视图',
-    submenu: [
-      {
-        label: '任务管理',
-      },
-      {
-        label: 'Excel同步',
-      },
-    ],
-  },
-];
+import getWorkFolder from '@/app/work-folder';
+import configFiles from '@/app/config-files';
 
+const isDevelopment = process.env.NODE_ENV !== 'production';
+
+const template: MenuItemConstructorOptions[] = [{ label: '文件' }, { label: '视图' }];
 Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
 // Scheme must be registered before the app is ready
@@ -116,7 +82,9 @@ app.on('ready', async () => {
     }
   }
 
+  // 工作文件夹
   getWorkFolder();
+  // 配置数据存储路径
   configFiles();
 
   createWindow();

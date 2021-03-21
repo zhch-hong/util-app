@@ -1,43 +1,44 @@
-import Vue from 'vue';
-import { Dialog } from 'element-ui';
+import Vue, { defineComponent, h, reactive } from 'vue';
 
-import StorageDir from './components/StorageDir.vue';
-import WorkDir from './components/WorkDir.vue';
+// import ConfigFolder from './components/ConfigFolder.vue';
+// import WorkFolder from './components/WorkFolder.vue';
 
-const obser = Vue.observable({ visible: false });
-const ComponentClass = Vue.extend({
-  render(h) {
-    return h(
-      Dialog,
-      {
-        props: {
-          title: '选项',
-          visible: obser.visible,
-          modal: false,
-          'close-on-click-modal': false,
-          'close-on-press-escape': false,
-          'custom-class': 'el-dialog__custom-class',
-        },
+const obser = reactive({ visible: false });
+const VNode = h(
+  'el-dialog',
+  {
+    props: {
+      title: '选项',
+      visible: obser.visible,
+      modal: false,
+      'close-on-click-modal': false,
+      'close-on-press-escape': false,
+      'custom-class': 'el-dialog__custom-class',
+    },
 
-        on: {
-          'update:visible': (visible: boolean) => {
-            obser.visible = visible;
-          },
-
-          close: () => {
-            obser.visible = false;
-          },
-        },
+    on: {
+      'update:visible': (visible: boolean) => {
+        obser.visible = visible;
       },
-      [h(StorageDir), h(WorkDir)]
-    );
+
+      close: () => {
+        obser.visible = false;
+      },
+    },
+  },
+  ['ooo', 'xxx']
+  // [h(ConfigFolder), h(WorkFolder)]
+);
+
+const Component = defineComponent({
+  render() {
+    return h('teleport', { props: { to: document.body } }, [VNode]);
   },
 });
 
-const instance = new ComponentClass();
-const div = document.createElement('div');
-document.body.append(div);
-instance.$mount(div);
+Vue;
+
+new Component();
 
 export function options() {
   obser.visible = true;
