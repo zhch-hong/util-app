@@ -30,7 +30,6 @@ export default Vue.extend({
     const data: Record<string, string>[] = REFREENCE ? _.cloneDeep(REFREENCE.select) : [];
 
     data.forEach((item) => (item['uuid'] = uuid()));
-    console.log(data);
 
     return {
       data: data,

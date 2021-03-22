@@ -47,8 +47,6 @@ export default Vue.extend({
     },
 
     contextmenu(data: Record<string, any>) {
-      console.log(data);
-
       const { Menu, MenuItem } = electron.remote;
       const menu = new Menu();
       const item = new MenuItem({

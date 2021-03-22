@@ -8,46 +8,42 @@
     </p>
     <div class="items-center">
       <input v-model.trim.lazy="path" class="input" type="text" />
-      <button class="set" @click="setWorkDir">选择路径</button>
+      <button class="set" @click="setworkFolder">选择路径</button>
     </div>
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue';
-import store from '@/electron-store';
+import { defineComponent } from 'vue';
 import { remote } from 'electron';
-import { statSync } from 'fs';
+import fs from 'fs';
+import electronStore from '@/electron-store';
 
-const { app, dialog, getCurrentWindow } = remote;
-
-export default Vue.extend({
-  name: 'WorkDir',
-
+export default defineComponent({
   data() {
     return {
-      path: store.get('workDir') as string,
+      path: electronStore.get('workFolder') as string,
     };
   },
 
   watch: {
     path: {
       handler(value: string) {
-        const stat = statSync(value);
+        const stat = fs.statSync(value);
         if (stat.isDirectory()) {
           this.relaunch();
         } else {
-          dialog.showErrorBox('无效路径', '该路径无效，请重新选择');
-          this.path = store.get('workDir') as string;
+          remote.dialog.showErrorBox('无效路径', '该路径无效，请重新选择');
+          this.path = electronStore.get('workFolder') as string;
         }
       },
     },
   },
 
   methods: {
-    setWorkDir(): void {
-      const win = getCurrentWindow();
+    setworkFolder(): void {
+      const win = remote.getCurrentWindow();
       win.focus();
-      const response = dialog.showOpenDialogSync(win, {
+      const response = remote.dialog.showOpenDialogSync(win, {
         title: '请选择工作目录',
         properties: ['openDirectory'],
         defaultPath: this.path,
@@ -60,24 +56,23 @@ export default Vue.extend({
     },
 
     relaunch(): void {
-      store.set('workDir', this.path);
+      electronStore.set('workFolder', this.path);
 
       setTimeout(() => {
-        const win = getCurrentWindow();
+        const win = remote.getCurrentWindow();
         win.focus();
-        dialog.showMessageBoxSync(win, {
+        remote.dialog.showMessageBoxSync(win, {
           title: '重启软件',
           message: '需要重启软件以生效',
           type: 'info',
         });
-        app.relaunch();
-        app.quit();
-      }, 1000);
+        remote.app.relaunch();
+        remote.app.quit();
+      }, 500);
     },
   },
 });
 </script>
-.
 <style lang="scss" scoped>
 div.container {
   cursor: default;

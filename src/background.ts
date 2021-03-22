@@ -18,10 +18,6 @@ Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }]);
 
 async function createWindow() {
-  fs.writeFile(path.resolve(__dirname, '../process_env.json'), JSON.stringify(process.env), (e) => {
-    console.log(e);
-  });
-
   // Create the browser window.
   const win = new BrowserWindow({
     width: 1632,

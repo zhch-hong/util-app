@@ -13,3 +13,86 @@ body {
   font-family: 'Helvetica', 'PingFang-SC-Regular';
   font-size: 14px;
 }
+
+/* Button */
+button.el-button {
+  font-family: inherit;
+}
+
+/* Menu */
+.el-menu {
+  border-right: none;
+}
+.el-menu-item {
+  height: 40px;
+  line-height: 40px;
+}
+.el-menu-item.is-active {
+  background-color: #dbdbdc !important;
+}
+
+/* Dialog */
+.el-dialog__header {
+  position: relative;
+  padding: 4px 8px;
+  background-color: #0070cc;
+  color: white;
+
+  .el-dialog__title {
+    color: inherit;
+    font-size: 14px;
+    cursor: default;
+    user-select: none;
+  }
+  .el-dialog__headerbtn {
+    height: 100%;
+    width: 40px;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+    &:hover {
+      background: red;
+    }
+    .el-dialog__close {
+      color: white;
+    }
+  }
+}
+.el-dialog__body {
+  padding: 20px 10px;
+}
+.el-dialog__footer {
+  padding: 10px;
+  box-shadow: 0 0 2px 0 #cccccc;
+}
+.el-dialog__custom-class {
+  box-shadow: 0 0 15px 0 rgba(128, 128, 128, 0.8);
+  border: 1px solid #bfbfbf;
+  border-radius: 0px;
+}
+
+/* Tree */
+.el-tree-node__content {
+  color: black;
+}
+.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+  background-color: #f2f2f3;
+}
+
+/* Tabs */
+.el-tabs--border-card > .el-tabs__content {
+  padding: 0;
+}
+
+/* Loading */
+.custom-loading-class {
+  background: #fff;
+  .el-loading-spinner {
+    i.el-icon-loading {
+      font-size: 26px;
+    }
+    .el-loading-text {
+      font-size: 14px;
+    }
+  }
+}

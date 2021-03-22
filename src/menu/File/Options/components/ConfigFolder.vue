@@ -8,47 +8,43 @@
     </p>
     <div class="items-center">
       <input v-model.trim.lazy="path" class="path-input" type="text" />
-      <button class="set" @click="setConfigDir">选择路径</button>
+      <button class="set" @click="setConfigFolder">选择路径</button>
     </div>
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue';
-import store from '@/electron-store';
+import { defineComponent } from 'vue';
 import { remote } from 'electron';
-import { readFileSync, writeFileSync, statSync } from 'fs';
 import { exec } from 'child_process';
+import fs from 'fs';
+import electronStore from '@/electron-store';
 
-const { app, dialog, getCurrentWindow } = remote;
-
-export default Vue.extend({
-  name: 'StorageDir',
-
+export default defineComponent({
   data() {
     return {
-      path: store.get('configDir') as string,
+      path: electronStore.get('configFolder') as string,
     };
   },
 
   watch: {
     path: {
       handler(value: string) {
-        const stat = statSync(value);
+        const stat = fs.statSync(value);
         if (stat.isDirectory()) {
           this.relaunch();
         } else {
-          dialog.showErrorBox('无效路径', '该路径无效，请重新选择');
-          this.path = store.get('configDir') as string;
+          remote.dialog.showErrorBox('无效路径', '该路径无效，请重新选择');
+          this.path = electronStore.get('configFolder') as string;
         }
       },
     },
   },
 
   methods: {
-    setConfigDir(): void {
-      const win = getCurrentWindow();
+    setConfigFolder(): void {
+      const win = remote.getCurrentWindow();
       win.focus();
-      const response = dialog.showOpenDialogSync(win, {
+      const response = remote.dialog.showOpenDialogSync(win, {
         title: '请选择配置存储路径',
         properties: ['openDirectory'],
         defaultPath: this.path,
@@ -61,30 +57,32 @@ export default Vue.extend({
     },
 
     relaunch(): void {
-      store.set('configDir', this.path);
-
-      exec(`xcopy /e ${store.get('configDir')}\\app_config\\ ${this.path}\\app_config\\`, (error) => {
+      const oldFolder = electronStore.get('configFolder') as string;
+      exec(`xcopy /e ${oldFolder}\\app_config\\ ${this.path}\\app_config\\`, (error) => {
         if (error) throw error;
-        exec(`rmdir /s /q ${store.get('configDir')}\\app_config`, (errorⅡ) => {
-          if (errorⅡ) throw errorⅡ;
-          const win = getCurrentWindow();
+        exec(`rmdir /s /q ${oldFolder}\\app_config`, (error2) => {
+          if (error2) throw error2;
+          const win = remote.getCurrentWindow();
           win.focus();
-          dialog.showMessageBoxSync(win, {
+          remote.dialog.showMessageBoxSync(win, {
             title: '重启软件',
             message: '需要重启软件以生效',
             type: 'info',
           });
+
+          electronStore.set('configFolder', this.path);
+
           setTimeout(() => {
-            app.relaunch();
-            app.quit();
-          }, 1000);
+            remote.app.relaunch();
+            remote.app.quit();
+          }, 500);
         });
       });
     },
   },
 });
 </script>
-.
+
 <style lang="scss" scoped>
 div.storage-dir {
   cursor: default;

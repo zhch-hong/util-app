@@ -6,7 +6,7 @@ import store from './store';
 // Element Plus
 import installElementPlus from './plugins/element';
 // 菜单栏
-import './menu';
+import setApplicationMenu from './menu';
 // iconfont
 import '@/assets/iconfont/iconfont.css';
 // global css
@@ -14,7 +14,8 @@ import './main.scss';
 
 const app = createApp(App);
 installElementPlus(app);
+setApplicationMenu();
 app
   .use(store)
   .use(router)
-  .mount('#body');
+  .mount('#app');
