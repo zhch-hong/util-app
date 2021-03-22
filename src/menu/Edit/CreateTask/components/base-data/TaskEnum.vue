@@ -13,7 +13,7 @@ import { resolve } from 'path';
 import store from '@/electron-store';
 import { readFileText } from '@/utils';
 
-const filePath = resolve(store.get('configDir') as string, 'app_config', 'input-manage.json');
+const filePath = resolve(store.get('configFolder') as string, 'app_config', 'input-manage.json');
 
 @Component
 export default class TaskEnum extends Vue {

@@ -33,7 +33,7 @@ import { readFileText } from '@/utils';
 import store from '@/electron-store';
 import UpdateReward from './UpdateReward.vue';
 
-const path = resolve(store.get('configDir') as string, 'app_config', 'input-manage.json');
+const path = resolve(store.get('configFolder') as string, 'app_config', 'input-manage.json');
 
 const inputList: Record<string, any>[] | undefined = readFileText(path);
 const assetData = inputList ? inputList.find((item) => item.value === 'asset') : null;

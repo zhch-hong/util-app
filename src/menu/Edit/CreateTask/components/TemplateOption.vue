@@ -23,7 +23,7 @@ import { cloneDeep } from 'lodash';
 import { readFileText, writeFileText } from '@/utils';
 import store from '@/electron-store';
 
-const path = resolve(resolve(store.get('configDir') as string, 'app_config'), `template-manage.json`);
+const path = resolve(resolve(store.get('configFolder') as string, 'app_config'), `template-manage.json`);
 
 function readTemplate(type: TemplateType): Record<string, any>[] {
   const object = readFileText(path);

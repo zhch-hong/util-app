@@ -63,7 +63,7 @@ const form: Record<string, any> = {
   is_send_email: false,
 };
 
-const filePath = resolve(store.get('configDir') as string, 'app_config', 'input-manage.json');
+const filePath = resolve(store.get('configFolder') as string, 'app_config', 'input-manage.json');
 
 @Component({
   components: { DialogFooter },

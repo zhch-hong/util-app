@@ -63,7 +63,7 @@ interface TreeMeta extends TreeData {
   type?: string;
 }
 
-const filePath = resolve(store.get('configDir') as string, 'app_config', 'source-manage.json');
+const filePath = resolve(store.get('configFolder') as string, 'app_config', 'source-manage.json');
 
 @Component({
   components: {
