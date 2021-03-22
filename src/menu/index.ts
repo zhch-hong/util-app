@@ -1,5 +1,5 @@
 import { MenuItemConstructorOptions, remote } from 'electron';
-// export { about } from './Help/About';
+import about from './Help/About';
 import options from './File/Options';
 // export { syncFile } from './Edit/SyncFile';
 // export { undo } from './Edit/Undo';
@@ -21,7 +21,7 @@ import { task } from './Route/Task';
 import { sync } from './Route/Sync';
 
 export default function() {
-  const { app, Menu } = remote;
+  const { Menu } = remote;
 
   const template: MenuItemConstructorOptions[] = [
     {
@@ -39,15 +39,6 @@ export default function() {
           label: '选项',
           click: () => (options.value = true),
         },
-
-        {
-          type: 'separator',
-        },
-        {
-          label: '退出',
-          accelerator: 'Ctrl+Q',
-          click: () => app.quit(),
-        },
       ],
     },
     {
@@ -60,6 +51,15 @@ export default function() {
         {
           label: 'Excel同步',
           click: sync,
+        },
+      ],
+    },
+    {
+      label: '帮助',
+      submenu: [
+        {
+          label: '关于',
+          click: () => (about.value = true),
         },
       ],
     },
