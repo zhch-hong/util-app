@@ -2,7 +2,6 @@
   <el-dialog
     v-model="visible"
     title="文件管理"
-    width="80%"
     custom-class="el-dialog__custom-class"
     :modal="false"
     :destroy-on-close="true"
@@ -22,12 +21,12 @@
           <CellInput v-model="row.file" />
         </template>
       </vxe-table-column>
-      <vxe-table-column title="起始ID" width="100px" align="center">
+      <vxe-table-column title="起始ID" width="100px">
         <template #default="{ row }">
           <CellInput v-model="row.start" />
         </template>
       </vxe-table-column>
-      <vxe-table-column title="截止ID" width="100px" align="center">
+      <vxe-table-column title="截止ID" width="100px">
         <template #default="{ row }">
           <CellInput v-model="row.end" />
         </template>
