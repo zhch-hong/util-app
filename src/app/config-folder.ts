@@ -24,22 +24,16 @@ const openConfigDirectory = (defaultPath?: string): string | undefined => {
   }
 };
 
-const getConfigFolder = () => {
-  if (folder !== '') {
-    return folder;
+if (folder === '') {
+  const _folder = openConfigDirectory();
+  if (_folder) {
+    folder = _folder;
+    electronStore.set('configFolder', folder);
   } else {
-    const _folder = openConfigDirectory();
-    if (_folder) {
-      folder = _folder;
-      electronStore.set('configFolder', folder);
-
-      return folder;
-    } else {
-      // 必须要选择工作目录
-      Electron.app.quit();
-    }
+    // 必须要选择工作目录
+    Electron.app.quit();
   }
-};
+}
 
 export { openConfigDirectory };
-export default getConfigFolder;
+export default folder;

@@ -1,6 +1,7 @@
 import { MenuItemConstructorOptions, remote } from 'electron';
 import about from './Help/About';
 import options from './File/Options';
+import file from './Config/File';
 // export { syncFile } from './Edit/SyncFile';
 // export { undo } from './Edit/Undo';
 // export { redo } from './Edit/Redo';
@@ -12,7 +13,6 @@ import options from './File/Options';
 // export { find } from './Edit/Find';
 // export { findNext } from './Edit/FindNext';
 // export { findPrev } from './Edit/FindPrev';
-// export { fileManage } from './Config/File';
 // export { sourceManage } from './Config/Source';
 // export { receive, enumerate, asset } from './Config/Input';
 // export { taskBase, taskProcess, taskSource } from './Config/Template';
@@ -38,6 +38,15 @@ export default function() {
         {
           label: '选项',
           click: () => (options.value = true),
+        },
+      ],
+    },
+    {
+      label: '配置',
+      submenu: [
+        {
+          label: '文件管理',
+          click: () => (file.value = true),
         },
       ],
     },

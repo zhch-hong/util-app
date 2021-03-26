@@ -1,94 +1,106 @@
 import fs from 'fs';
 import path from 'path';
-import getConfigFolder from './config-folder';
+import configFolder from './config-folder';
 
-function configFiles() {
-  const configFolder = getConfigFolder();
+const pathMap = {
+  fileManagePath: '',
+  inputManagePath: '',
+  sourceManagePath: '',
+  templateManagePath: '',
+};
 
-  if (!configFolder) {
-    throw new Error('没有配置数据存储目录');
+Object.defineProperties(pathMap, {
+  fileManagePath: {
+    get(): string {
+      return path.resolve(configFolder, 'app_config', 'file-manage.json');
+    },
+  },
+  inputManagePath: {
+    get(): string {
+      return path.resolve(configFolder, 'app_config', 'input-manage.json');
+    },
+  },
+  sourceManagePath: {
+    get(): string {
+      return path.resolve(configFolder, 'app_config', 'source-manage.json');
+    },
+  },
+  templateManagePath: {
+    get(): string {
+      return path.resolve(configFolder, 'app_config', 'template-manage.json');
+    },
+  },
+});
+
+try {
+  const stat = fs.statSync(pathMap.fileManagePath);
+  if (!stat.isFile()) {
+    throw new Error(`create file ${pathMap.fileManagePath}`);
   }
-
-  const folderPath = path.resolve(configFolder, 'app_config');
-
-  if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath);
-  }
-
-  const filemanage = path.resolve(folderPath, `file-manage.json`);
-  try {
-    const stat = fs.statSync(filemanage);
-    if (!stat.isFile()) {
-      throw new Error(`create file ${filemanage}`);
-    }
-  } catch (error) {
-    fs.writeFileSync(filemanage, JSON.stringify([]));
-  }
-
-  const inputmanage = path.resolve(folderPath, `input-manage.json`);
-  try {
-    const stat = fs.statSync(inputmanage);
-    if (!stat.isFile()) {
-      throw new Error(`create file ${inputmanage}`);
-    }
-  } catch (error) {
-    fs.writeFileSync(
-      inputmanage,
-      JSON.stringify([
-        {
-          value: 'type',
-          name: '任务获得类型',
-          select: [],
-        },
-        {
-          value: 'enum',
-          name: '任务枚举类型',
-          select: [],
-        },
-        {
-          value: 'asset',
-          name: '财富类型',
-          select: [],
-        },
-      ])
-    );
-  }
-
-  const sourcemanage = path.resolve(folderPath, `source-manage.json`);
-  try {
-    const stat = fs.statSync(sourcemanage);
-    if (!stat.isFile()) {
-      throw new Error(`create file ${sourcemanage}`);
-    }
-  } catch (error) {
-    fs.writeFileSync(
-      sourcemanage,
-      JSON.stringify([
-        {
-          id: 'root',
-          label: 'Root',
-          children: [],
-        },
-      ])
-    );
-  }
-
-  const templatemanage = path.resolve(folderPath, `template-manage.json`);
-  try {
-    const stat = fs.statSync(templatemanage);
-    if (!stat.isFile()) {
-      throw new Error(`create file ${templatemanage}`);
-    }
-  } catch (error) {
-    fs.writeFileSync(
-      templatemanage,
-      JSON.stringify({
-        base: [],
-        process: [],
-        source: [],
-      })
-    );
-  }
+} catch (error) {
+  fs.writeFileSync(pathMap.fileManagePath, JSON.stringify([]));
 }
 
-export default configFiles;
+try {
+  const stat = fs.statSync(pathMap.inputManagePath);
+  if (!stat.isFile()) {
+    throw new Error(`create file ${pathMap.inputManagePath}`);
+  }
+} catch (error) {
+  fs.writeFileSync(
+    pathMap.inputManagePath,
+    JSON.stringify([
+      {
+        value: 'type',
+        name: '任务获得类型',
+        select: [],
+      },
+      {
+        value: 'enum',
+        name: '任务枚举类型',
+        select: [],
+      },
+      {
+        value: 'asset',
+        name: '财富类型',
+        select: [],
+      },
+    ])
+  );
+}
+
+try {
+  const stat = fs.statSync(pathMap.sourceManagePath);
+  if (!stat.isFile()) {
+    throw new Error(`create file ${pathMap.sourceManagePath}`);
+  }
+} catch (error) {
+  fs.writeFileSync(
+    pathMap.sourceManagePath,
+    JSON.stringify([
+      {
+        id: 'root',
+        label: 'Root',
+        children: [],
+      },
+    ])
+  );
+}
+
+try {
+  const stat = fs.statSync(pathMap.templateManagePath);
+  if (!stat.isFile()) {
+    throw new Error(`create file ${pathMap.templateManagePath}`);
+  }
+} catch (error) {
+  fs.writeFileSync(
+    pathMap.templateManagePath,
+    JSON.stringify({
+      base: [],
+      process: [],
+      source: [],
+    })
+  );
+}
+
+export default pathMap;

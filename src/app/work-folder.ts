@@ -25,22 +25,16 @@ const openWorkDirectory = (defaultPath?: string): string | undefined => {
   }
 };
 
-const getWorkFolder = () => {
-  if (folder !== '') {
-    return folder;
+if (folder === '') {
+  const _folder = openWorkDirectory();
+  if (_folder) {
+    folder = _folder;
+    electronStore.set('workFolder', folder);
   } else {
-    const _folder = openWorkDirectory();
-    if (_folder) {
-      folder = _folder;
-      electronStore.set('workFolder', folder);
-
-      return folder;
-    } else {
-      // 必须要选择工作目录
-      Electron.app.quit();
-    }
+    // 必须要选择工作目录
+    Electron.app.quit();
   }
-};
+}
 
 export { openWorkDirectory };
-export default getWorkFolder;
+export default folder;

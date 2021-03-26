@@ -5,6 +5,8 @@ import store from './store';
 
 // Element Plus
 import installElementPlus from './plugins/element';
+// vxe-table
+import installVXETable from './plugins/vxe-table';
 // 菜单栏
 import setApplicationMenu from './menu';
 // iconfont
@@ -14,6 +16,7 @@ import './main.scss';
 
 const app = createApp(App);
 installElementPlus(app);
+installVXETable(app);
 setApplicationMenu();
 app
   .use(store)

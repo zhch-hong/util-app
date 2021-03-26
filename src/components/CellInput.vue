@@ -7,11 +7,11 @@
       class="inline-input"
       type="text"
       @keydown.enter="submit"
-      @keydown.esc="edit = false"
+      @keydown.esc.stop="edit = false"
       @blur="edit = false"
     />
   </div>
-  <span v-else style="cursor: default" @click="edit = true">{{ modelValue }}</span>
+  <div v-else class="text" @click="edit = true">{{ modelValue }}</div>
 </template>
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
@@ -72,5 +72,10 @@ input.inline-input {
   border-bottom: 1px solid #e0e0e0;
   display: block;
   width: 100%;
+}
+
+div.text {
+  height: 24px;
+  line-height: 24px;
 }
 </style>
