@@ -2,20 +2,11 @@
 
 import path from 'path';
 import fs from 'fs';
-import { app, protocol, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
+import { app, protocol, BrowserWindow } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension from 'electron-devtools-installer';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
-
-// 避免菜单栏闪烁，因为实际的菜单是在渲染进程中设置的
-const template: MenuItemConstructorOptions[] = [
-  { label: '文件' },
-  { label: '配置' },
-  { label: '视图' },
-  { label: '帮助' },
-];
-Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }]);
@@ -32,6 +23,8 @@ async function createWindow() {
   const win = new BrowserWindow({
     width: 1632,
     height: 918,
+    frame: false,
+    titleBarStyle: 'hidden',
     webPreferences: {
       /**
        * https://nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration

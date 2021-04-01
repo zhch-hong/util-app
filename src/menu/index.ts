@@ -20,60 +20,57 @@ import file from './Config/File';
 import { task } from './Route/Task';
 import { sync } from './Route/Sync';
 
-export default function() {
-  const { Menu } = remote;
+const template: MenuItemConstructorOptions[] = [
+  {
+    label: '文件',
+    submenu: [
+      {
+        label: '重新加载',
+        accelerator: '116',
+        click: () => {
+          console.log('fs');
+        },
+      },
+      {
+        type: 'separator',
+      },
+      {
+        label: '选项',
+        click: () => (options.value = true),
+      },
+    ],
+  },
+  {
+    label: '配置',
+    submenu: [
+      {
+        label: '文件管理',
+        click: () => (file.value = true),
+      },
+    ],
+  },
+  {
+    label: '视图',
+    submenu: [
+      {
+        label: '任务管理',
+        click: task,
+      },
+      {
+        label: 'Excel同步',
+        click: sync,
+      },
+    ],
+  },
+  {
+    label: '帮助',
+    submenu: [
+      {
+        label: '关于',
+        click: () => (about.value = true),
+      },
+    ],
+  },
+];
 
-  const template: MenuItemConstructorOptions[] = [
-    {
-      label: '文件',
-      submenu: [
-        {
-          label: '重新加载',
-          accelerator: 'F5',
-          role: 'forceReload',
-        },
-        {
-          type: 'separator',
-        },
-        {
-          label: '选项',
-          click: () => (options.value = true),
-        },
-      ],
-    },
-    {
-      label: '配置',
-      submenu: [
-        {
-          label: '文件管理',
-          click: () => (file.value = true),
-        },
-      ],
-    },
-    {
-      label: '视图',
-      submenu: [
-        {
-          label: '任务管理',
-          click: task,
-        },
-        {
-          label: 'Excel同步',
-          click: sync,
-        },
-      ],
-    },
-    {
-      label: '帮助',
-      submenu: [
-        {
-          label: '关于',
-          click: () => (about.value = true),
-        },
-      ],
-    },
-  ];
-
-  const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
-}
+export default remote.Menu.buildFromTemplate(template);

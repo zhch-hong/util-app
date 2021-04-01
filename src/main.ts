@@ -3,12 +3,12 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
+// custom-electron-titlebar
+import './plugins/custom-electron-titlebar';
 // Element Plus
 import installElementPlus from './plugins/element';
 // vxe-table
 import installVXETable from './plugins/vxe-table';
-// 菜单栏
-import setApplicationMenu from './menu';
 // iconfont
 import '@/assets/iconfont/iconfont.css';
 // global css
@@ -17,7 +17,6 @@ import './main.scss';
 const app = createApp(App);
 installElementPlus(app);
 installVXETable(app);
-setApplicationMenu();
 app
   .use(store)
   .use(router)
