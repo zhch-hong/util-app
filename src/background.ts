@@ -1,18 +1,33 @@
 'use strict';
 
+import path from 'path';
+import fs from 'fs';
 import { app, protocol, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension from 'electron-devtools-installer';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
-const template: MenuItemConstructorOptions[] = [{ label: '文件' }, { label: '视图' }];
+// 避免菜单栏闪烁，因为实际的菜单是在渲染进程中设置的
+const template: MenuItemConstructorOptions[] = [
+  { label: '文件' },
+  { label: '配置' },
+  { label: '视图' },
+  { label: '帮助' },
+];
 Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }]);
 
+function writeProcess() {
+  console.log(path.resolve(__dirname, 'process.json')); // D:\Projects\util-app\dist_electron\process.json
+  fs.writeFileSync(path.resolve(__dirname, 'process.json'), JSON.stringify(process.env));
+}
+
 async function createWindow() {
+  // writeProcess();
+
   // Create the browser window.
   const win = new BrowserWindow({
     width: 1632,
@@ -63,6 +78,7 @@ app.on('activate', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
+  // 初始化工作文件夹和配置文件
   require('./app/work-folder');
   require('./app/config-files');
 

@@ -77,7 +77,7 @@ export default defineComponent({
       chrome,
       node,
       v8,
-      os: os.version() + '_' + os.arch() + '_' + os.release(),
+      os: os.type() + '_' + os.arch() + '_' + os.release(),
     };
   },
 });
