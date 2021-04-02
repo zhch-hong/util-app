@@ -12,6 +12,7 @@ body {
   margin: 0;
   font-family: 'Helvetica', 'PingFang-SC-Regular';
   font-size: 14px;
+  color: black;
 }
 
 /* Button */
@@ -34,9 +35,10 @@ button.el-button {
 /* Dialog */
 .el-dialog__header {
   position: relative;
-  padding: 4px 8px;
-  background-color: #0070cc;
-  color: white;
+  padding: 10px;
+  background-color: #fff;
+  border-bottom: 1px solid #e6e6e6;
+  font-weight: 600;
 
   .el-dialog__title {
     color: inherit;
@@ -50,11 +52,13 @@ button.el-button {
     right: 0;
     top: 0;
     cursor: pointer;
-    &:hover {
-      background: red;
-    }
     .el-dialog__close {
-      color: white;
+      color: #373a49;
+      font-weight: bold;
+      color: rgba(0, 0, 0, 0.5);
+      &:hover {
+        color: #16171d;
+      }
     }
   }
 }
@@ -66,9 +70,9 @@ button.el-button {
   box-shadow: 0 0 2px 0 #cccccc;
 }
 .el-dialog__custom-class {
-  box-shadow: 0 0 15px 0 rgba(128, 128, 128, 0.8);
-  border: 1px solid #bfbfbf;
-  border-radius: 0px;
+  box-shadow: 0 0 10px 0 rgba(128, 128, 128, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 /* Tree */

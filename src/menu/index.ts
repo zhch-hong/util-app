@@ -26,7 +26,7 @@ const template: MenuItemConstructorOptions[] = [
     submenu: [
       {
         label: '重新加载',
-        accelerator: '116',
+        accelerator: 'F5',
         click: () => {
           console.log('fs');
         },

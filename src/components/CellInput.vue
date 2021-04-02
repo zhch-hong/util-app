@@ -77,5 +77,7 @@ input.inline-input {
 div.text {
   height: 24px;
   line-height: 24px;
+  color: black;
+  font-size: 14px;
 }
 </style>
