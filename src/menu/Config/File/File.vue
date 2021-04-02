@@ -6,7 +6,7 @@
     :modal="false"
     :destroy-on-close="true"
     :close-on-click-modal="false"
-    @opened="opened"
+    @closed="close"
   >
     <vxe-toolbar perfect>
       <template #buttons>
@@ -14,7 +14,7 @@
         <el-button size="small" @click="handleDelete">删除</el-button>
       </template>
     </vxe-toolbar>
-    <vxe-table ref="xTable" border="full" header-align="center">
+    <vxe-table ref="xTable" :data="tableData" border="full" header-align="center">
       <vxe-table-column type="checkbox" width="40px" align="center"></vxe-table-column>
       <vxe-table-column title="文件名" width="400px">
         <template #default="{ row }">
@@ -70,23 +70,18 @@ export default defineComponent({
 
   data() {
     return {
-      instance: {} as VxeTableInstance,
+      tableData: readFile(),
     };
   },
 
   methods: {
-    opened(): void {
-      this.instance = this.$refs.xTable as VxeTableInstance;
-      this.loadTableData();
-    },
-
-    loadTableData(): void {
-      const data = readFile();
-      this.instance.loadData(data);
+    close() {
+      this.tableData = readFile();
+      // (this.$refs.xTable as VxeTableInstance).updateData();
     },
 
     handleSave() {
-      const { fullData } = this.instance.getTableData();
+      const { fullData } = (this.$refs.xTable as VxeTableInstance).getTableData();
       const data = _.cloneDeep<RowInfo[]>(fullData);
 
       data.forEach((row) => delete row['_XID']);
@@ -95,11 +90,11 @@ export default defineComponent({
     },
 
     handleAppend() {
-      this.instance.insert({ file: '', start: '', end: '', desc: '' });
+      (this.$refs.xTable as VxeTableInstance).insert({ file: '', start: '', end: '', desc: '' });
     },
 
     handleDelete() {
-      this.instance.removeCheckboxRow();
+      (this.$refs.xTable as VxeTableInstance).removeCheckboxRow();
     },
   },
 });

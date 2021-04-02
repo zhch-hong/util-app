@@ -35,12 +35,14 @@
     "vue-router": "^4.0.0-0",
     "vuedraggable": "^4.0.1",
     "vuex": "^4.0.0-0",
+    "vuex-module-decorators": "^1.0.1",
     "vxe-table": "^4.0.3",
     "xe-utils": "^3.1.11"
   },
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/lodash": "^4.14.168",
+    "@types/mousetrap": "^1.6.6",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "@vue/cli-plugin-eslint": "~4.5.0",

@@ -1,8 +1,8 @@
 import router from '@/router';
-import { KeyboardEventModule } from '@/store/modules/keyboard-event';
+import { KeyboardModule } from '@/store/modules/keyboard';
 
 export function doubleTask() {
   if (router.currentRoute.path !== '/edit-file') return;
 
-  KeyboardEventModule.keyboardKeypress('ctrl+d');
+  KeyboardModule.keyboardKeypress('ctrl+d');
 }

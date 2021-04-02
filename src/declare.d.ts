@@ -22,3 +22,8 @@ export type FileManageOption = {
    */
   desc: string;
 };
+
+/**
+ * mousetrap键盘触发动作
+ */
+export type MousetrapAction = 'keypress' | 'keydown' | 'keyup';

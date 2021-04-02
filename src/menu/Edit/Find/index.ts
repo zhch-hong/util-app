@@ -1,5 +1,5 @@
-import { KeyboardEventModule } from '@/store/modules/keyboard-event';
+import { KeyboardModule } from '@/store/modules/keyboard';
 
 export function find() {
-  KeyboardEventModule.keyboardKeypress('ctrl+f');
+  KeyboardModule.keyboardKeypress('ctrl+f');
 }

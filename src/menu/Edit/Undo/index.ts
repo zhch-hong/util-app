@@ -1,5 +1,5 @@
-import { KeyboardEventModule } from '@/store/modules/keyboard-event';
+import { KeyboardModule } from '@/store/modules/keyboard';
 
 export function undo() {
-  KeyboardEventModule.keyboardKeypress('ctrl+z');
+  KeyboardModule.keyboardKeypress('ctrl+z');
 }

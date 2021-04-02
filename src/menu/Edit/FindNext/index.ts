@@ -1,5 +1,5 @@
-import { KeyboardEventModule } from '@/store/modules/keyboard-event';
+import { KeyboardModule } from '@/store/modules/keyboard';
 
 export function findNext() {
-  KeyboardEventModule.keyboardKeypress('f3');
+  KeyboardModule.keyboardKeypress('f3');
 }

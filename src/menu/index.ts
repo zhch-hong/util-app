@@ -1,4 +1,5 @@
 import { MenuItemConstructorOptions, remote } from 'electron';
+import mousetrap from 'mousetrap';
 import about from './Help/About';
 import options from './File/Options';
 import file from './Config/File';
@@ -26,10 +27,8 @@ const template: MenuItemConstructorOptions[] = [
     submenu: [
       {
         label: '重新加载',
-        accelerator: 'F5',
-        click: () => {
-          console.log('fs');
-        },
+        accelerator: 'Ctrl + R',
+        click: () => mousetrap.trigger('Ctrl+R', 'keydown'),
       },
       {
         type: 'separator',
@@ -37,6 +36,14 @@ const template: MenuItemConstructorOptions[] = [
       {
         label: '选项',
         click: () => (options.value = true),
+      },
+      {
+        type: 'separator',
+      },
+      {
+        label: '退出',
+        accelerator: 'Ctrl + Shift + Q',
+        click: () => mousetrap.trigger('command+shift+q', 'keydown'),
       },
     ],
   },

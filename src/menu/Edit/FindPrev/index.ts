@@ -1,5 +1,5 @@
-import { KeyboardEventModule } from '@/store/modules/keyboard-event';
+import { KeyboardModule } from '@/store/modules/keyboard';
 
 export function findPrev() {
-  KeyboardEventModule.keyboardKeypress('shift+f3');
+  KeyboardModule.keyboardKeypress('shift+f3');
 }
