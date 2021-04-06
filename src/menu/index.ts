@@ -27,8 +27,8 @@ const template: MenuItemConstructorOptions[] = [
     submenu: [
       {
         label: '重新加载',
-        accelerator: 'Ctrl + R',
-        click: () => mousetrap.trigger('Ctrl+R', 'keydown'),
+        accelerator: 'Ctrl + Shift + R',
+        click: () => mousetrap.trigger('ctrl+shift+r'),
       },
       {
         type: 'separator',
@@ -43,7 +43,7 @@ const template: MenuItemConstructorOptions[] = [
       {
         label: '退出',
         accelerator: 'Ctrl + Shift + Q',
-        click: () => mousetrap.trigger('command+shift+q', 'keydown'),
+        click: () => mousetrap.trigger('ctrl+shift+q'),
       },
     ],
   },

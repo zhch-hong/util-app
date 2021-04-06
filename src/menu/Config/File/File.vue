@@ -6,7 +6,7 @@
     :modal="false"
     :destroy-on-close="true"
     :close-on-click-modal="false"
-    @closed="close"
+    @closed="closed"
   >
     <vxe-toolbar perfect>
       <template #buttons>
@@ -75,12 +75,12 @@ export default defineComponent({
   },
 
   methods: {
-    close() {
+    closed() {
       this.tableData = readFile();
-      // (this.$refs.xTable as VxeTableInstance).updateData();
     },
 
     handleSave() {
+      // 这里不能使用this.tableData，要使用api调用获取到的数据
       const { fullData } = (this.$refs.xTable as VxeTableInstance).getTableData();
       const data = _.cloneDeep<RowInfo[]>(fullData);
 
