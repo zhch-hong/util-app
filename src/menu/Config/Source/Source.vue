@@ -1,9 +1,16 @@
 <template>
-  <div style="width: 500px; margin: 20px 0 0 20px">
+  <el-dialog
+    v-model="visible"
+    title="来源管理"
+    custom-class="el-dialog__custom-class"
+    :modal="false"
+    :destroy-on-close="true"
+    :close-on-click-modal="false"
+  >
     <el-tree
-      ref="eltree"
+      ref="elTree"
       draggable
-      node-key="uuid"
+      node-key="value"
       :data="treeData"
       :highlight-current="false"
       :default-expand-all="false"
@@ -17,25 +24,24 @@
           @update="update(node, data)"
           @remove="remove(node, data)"
         >
-          <span v-if="data.type === 'root'"
-            ><i class="el-icon-s-promotion" style="margin-right: 2px"></i>{{ node.label }}</span
-          >
-          <span v-else-if="data.type === 'source'"
-            ><i class="el-icon-menu" style="margin-right: 2px"></i>{{ node.label }}</span
-          >
-          <span v-else-if="data.type === 'condition'"
-            ><i class="el-icon-s-operation" style="margin-right: 2px"></i>{{ node.label }}</span
-          >
-          <span v-else><i class="el-icon-tickets" style="margin-right: 2px"></i>{{ node.label }}</span>
+          <!-- 来源 -->
+          <span v-if="data.type === 'source'">
+            <i class="el-icon-menu" style="margin-right: 2px"></i>
+            {{ node.label }}
+          </span>
+          <!-- 条件 -->
+          <span v-else-if="data.type === 'condition'">
+            <i class="el-icon-s-operation" style="margin-right: 2px"></i>
+            {{ node.label }}
+          </span>
+          <!-- 条件值 -->
+          <span v-else>
+            <i class="el-icon-tickets" style="margin-right: 2px"></i>
+            {{ node.label }}
+          </span>
         </NodeItem>
       </template>
     </el-tree>
-    <!-- tippy.js自定义主题，在树节点会用到，因为是公用的，所以在这里（父级）定义，它的css也必须是全局的，不能scoped -->
-    <div data-tippy-root>
-      <div class="tippy-box" data-theme="tomato">
-        <div class="tippy-content"></div>
-      </div>
-    </div>
 
     <UpdateNode
       :model="model"
@@ -44,156 +50,125 @@
       @update:visible="(v) => (updateNode = v)"
       @submit="submit"
     />
-  </div>
+  </el-dialog>
 </template>
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { TreeData, TreeNode } from 'element-ui/types/tree';
-import { resolve } from 'path';
-import { v4 as uuid } from 'uuid';
+import { defineComponent } from 'vue';
+import _ from 'lodash';
 
-import store from '@/electron-store';
+import visible from '.';
+import pathMap from '@/app/config-files';
 import { readFileText, writeFileText } from '@/utils';
+import { SourceManageOption } from '@/declare';
 
-import UpdateNode from './components/UpdateNode.vue';
 import NodeItem from './components/NodeItem.vue';
+import UpdateNode from './components/UpdateNode.vue';
 
-interface TreeMeta extends TreeData {
-  uuid?: string;
-  type?: string;
+function readFile(): Array<SourceManageOption> {
+  return readFileText(pathMap.sourceManagePath);
 }
 
-const filePath = resolve(store.get('configFolder') as string, 'app_config', 'source-manage.json');
+export default defineComponent({
+  name: 'Source',
 
-@Component({
   components: {
-    UpdateNode,
     NodeItem,
+    UpdateNode,
   },
-})
-export default class SourceManage extends Vue {
-  treeData: TreeMeta[] = [];
-  model: 'append' | 'update' = 'append';
-  updateNode = false;
-  updateTreeNode: TreeNode<string, TreeMeta> | null = null;
-  updateTreeData: TreeMeta | null = {};
 
-  mounted(): void {
-    this.loadTreeData();
-  }
+  setup() {
+    return {
+      visible,
+    };
+  },
 
-  loadTreeData(): void {
-    const array: TreeMeta[] = readFileText(filePath);
-    let _data: TreeMeta[] = [
-      {
-        id: 'root',
-        label: '任务来源管理',
-        children: [],
-      },
-    ];
-    if (array[0] && array[0].id === 'root') {
-      _data = array;
-      _data[0].label = '任务来源管理';
-    } else {
-      _data[0].children = array;
-    }
-    this.validateTree(_data);
-    this.treeData = _data;
-  }
+  data() {
+    return {
+      treeData: readFile(),
+      model: 'append' as 'update' | 'append',
+      updateNode: false,
+      updateTreeNode: null as Record<string, unknown> | null,
+      updateTreeData: null as Record<string, unknown> | null,
+    };
+  },
 
-  append(node: TreeNode<string, TreeMeta>, data: TreeMeta): void {
-    this.model = 'append';
-    this.updateTreeNode = node;
-    this.updateTreeData = data;
-    this.updateNode = true;
-  }
+  methods: {
+    nodeDrop(
+      before: Record<string, unknown>,
+      after: Record<string, unknown>,
+      position: 'before' | 'after' | 'inner'
+    ): void {
+      console.log(before, after, position);
 
-  update(node: TreeNode<string, TreeMeta>, data: TreeMeta): void {
-    if (data?.id === 'root') return;
+      // if (before.level === 1 || after.level === 1) {
+      //   this.treeData = readFile();
+      // }
+    },
 
-    this.model = 'update';
-    this.updateTreeNode = node;
-    this.updateTreeData = data;
-    this.updateNode = true;
-  }
+    append(node: Record<string, unknown>, data: Record<string, unknown>): void {
+      this.model = 'append';
+      this.updateTreeNode = node;
+      this.updateTreeData = data;
+      this.updateNode = true;
+    },
 
-  remove(node: TreeNode<string, TreeMeta>, data: TreeMeta): void {
-    if (data?.id === 'root') return;
+    update(node: Record<string, unknown>, data: Record<string, unknown>): void {
+      console.log(node);
 
-    const parent = node?.parent;
-    if (!parent) return;
+      this.model = 'update';
+      this.updateTreeNode = node;
+      this.updateTreeData = data;
+      this.updateNode = true;
+    },
 
-    const children = parent.data.children || parent.data;
-    if (!Array.isArray(children)) return;
+    remove(node: Record<string, unknown>, data: Record<string, unknown>): void {
+      const parent = node.parent as Record<string, unknown> | undefined;
+      if (!parent) return;
 
-    const index = children.findIndex((d) => d.id === data?.id);
-    children.splice(index, 1);
+      const nodeData = parent.data as Record<string, unknown>;
+      const children = nodeData.children || parent.data;
+      if (!Array.isArray(children)) return;
 
-    this.validateTree(this.treeData);
+      const index = children.findIndex((d) => d.value === data.value);
+      children.splice(index, 1);
 
-    writeFileText(filePath, this.treeData);
-  }
+      const _data = this.clear(this.treeData);
 
-  submit(node: Record<string, string>): void {
-    const { value, label } = node;
-    if (this.model === 'append') {
-      const node = {
-        id: value,
-        label: label,
-        uuid: uuid(),
-        children: [],
-      };
-      this.updateTreeData?.children?.push(node);
-    } else {
-      const node: TreeMeta = {
-        id: value,
-        label: label,
-        uuid: uuid(),
-        children: this.updateTreeData?.children,
-      };
-      if (this.updateTreeNode) {
-        // this.updateTreeNode.data = node; // 这样写不会生效
-        Object.assign(this.updateTreeNode.data, node);
+      writeFileText(pathMap.sourceManagePath, _data);
+    },
+
+    submit(node: Record<string, string>): void {
+      if (this.model === 'append') {
+        if (this.updateTreeData) {
+          (this.updateTreeData.children as Record<string, unknown>[]).push(node);
+        }
+      } else {
+        if (this.updateTreeNode) {
+          // this.updateTreeNode.data = node; // 这样写不会生效
+          Object.assign(this.updateTreeNode.data, node);
+        }
       }
-    }
 
-    this.validateTree(this.treeData);
+      const _data = this.clear(this.treeData);
 
-    writeFileText(filePath, this.treeData);
-  }
+      writeFileText(pathMap.sourceManagePath, _data);
+    },
 
-  nodeDrop(before: TreeNode<string, TreeMeta>, after: TreeNode<string, TreeMeta>): void {
-    if (before.level === 1 || after.level === 1) {
-      this.loadTreeData();
-    }
-  }
+    clear(_data: Record<string, unknown>[]) {
+      const data = _.cloneDeep(_data);
+      data.forEach((item) => {
+        if (item.uuid) delete item.uuid;
+        if (item.children) {
+          if ((item.children as Record<string, unknown>[]).length === 0) {
+            delete item.children;
+          } else {
+            this.clear(item.children as Record<string, unknown>[]);
+          }
+        }
+      });
 
-  validateTree(data: TreeMeta[], level = 1): void {
-    data.forEach((meta) => {
-      if (!meta.uuid) meta.uuid = uuid();
-      if (level === 1) {
-        if (!meta.type) meta.type = 'root';
-      } else if (level === 2) {
-        if (!meta.type) meta.type = 'source';
-      } else if (level === 3) {
-        if (!meta.type) meta.type = 'condition';
-      } else if (level === 4) {
-        if (!meta.type) meta.type = 'value';
-      }
-      if (meta.children && meta.children.length !== 0) {
-        this.validateTree(meta.children, level + 1);
-      }
-    });
-  }
-}
+      return data;
+    },
+  },
+});
 </script>
-
-<style lang="scss">
-.tippy-box[data-theme~='tomato'] {
-  background-color: transparent;
-  color: inherit;
-  .tippy-content {
-    padding: 0;
-  }
-}
-</style>

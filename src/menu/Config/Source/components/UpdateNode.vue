@@ -1,13 +1,16 @@
 <template>
   <el-dialog
-    :visible.sync="visiblesync"
+    v-model="visiblesync"
     :close-on-click-modal="false"
     :title="title"
+    :modal="false"
+    :destroy-on-close="true"
+    custom-class="el-dialog__custom-class"
+    width="25vw"
     append-to-body
     @closed="closed"
-    width="25vw"
   >
-    <el-form ref="ruleForm" :model="form" :rules="rules" label-width="80px">
+    <el-form ref="ruleForm" :model="form" :rules="rules" size="small" label-width="80px">
       <el-form-item label="字段值" prop="value">
         <el-input v-model="form.value"></el-input>
       </el-form-item>
@@ -16,77 +19,86 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <DialogFooter @reject="visiblesync = false" @resolve="submit" />
+      <el-button size="small" @click="visiblesync = false">取消</el-button>
+      <el-button size="small" type="primary" @click="submit">保存</el-button>
     </template>
   </el-dialog>
 </template>
 <script lang="ts">
-import { Component, Prop, PropSync, Vue, Watch } from 'vue-property-decorator';
-import { Form } from 'element-ui';
+import { defineComponent } from 'vue';
 
-import DialogFooter from '@/components/DialogFooter.vue';
+export default defineComponent({
+  name: 'UpdateNode',
 
-@Component({
-  components: {
-    DialogFooter,
+  props: ['model', 'node', 'visible'],
+
+  emits: ['update:visible', 'submit'],
+
+  data() {
+    return {
+      form: {
+        value: '',
+        label: '',
+      } as Record<string, string>,
+      rules: {
+        value: [{ required: true, trigger: 'none' }],
+        label: [{ required: true, trigger: 'none' }],
+      },
+    };
   },
-})
-export default class UpdateNode extends Vue {
-  $refs!: {
-    ruleForm: Form;
-  };
 
-  @Prop({ type: String, required: true }) model!: 'append' | 'update';
-  @Prop({ type: Object, required: true })
-  node!: Record<string, string>;
-  @PropSync('visible', { type: Boolean, required: true }) visiblesync!: boolean;
+  computed: {
+    title(): string {
+      return this.model === 'append' ? '添加字段' : '修改字段';
+    },
 
-  get title(): string {
-    return this.model === 'append' ? '添加字段' : '修改字段';
-  }
+    visiblesync: {
+      get(): boolean {
+        return this.visible;
+      },
 
-  @Watch('model')
-  modelChange(): void {
-    this.refreshForm();
-  }
-  @Watch('node')
-  nodeChange(): void {
-    this.refreshForm();
-  }
+      set(value: boolean) {
+        this.$emit('update:visible', value);
+      },
+    },
+  },
 
-  form: Record<string, string> = {
-    value: '',
-    label: '',
-  };
-  rules = {
-    value: [{ required: true, trigger: 'none' }],
-    label: [{ required: true, trigger: 'none' }],
-  };
+  watch: {
+    mode() {
+      this.refreshForm();
+    },
 
-  async submit(): Promise<void> {
-    try {
-      await this.$refs.ruleForm.validate();
-    } catch (error) {
-      return;
-    }
+    node() {
+      this.refreshForm();
+    },
+  },
 
-    this.$emit('submit', this.form);
-    this.visiblesync = false;
-  }
+  methods: {
+    async submit(): Promise<void> {
+      try {
+        await (this.$refs.ruleForm as any).validate();
+      } catch (error) {
+        return;
+      }
 
-  refreshForm(): void {
-    const value = this.model;
-    if (value === 'update') {
-      this.form.value = this.node.id;
-      this.form.label = this.node.label;
-    } else {
-      this.form.value = '';
-      this.form.label = '';
-    }
-  }
+      this.$emit('submit', this.form);
+      this.visiblesync = false;
+    },
 
-  closed(): void {
-    this.$refs.ruleForm.resetFields();
-  }
-}
+    refreshForm(): void {
+      const value = this.model;
+      if (value === 'update') {
+        this.form.value = this.node.value;
+        this.form.label = this.node.label;
+      } else {
+        this.form.value = '';
+        this.form.label = '';
+      }
+    },
+
+    closed(): void {
+      (this.$refs.ruleForm as any).resetFields();
+    },
+  },
+});
 </script>

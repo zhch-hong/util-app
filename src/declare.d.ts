@@ -1,4 +1,9 @@
 /**
+ * mousetrap键盘触发动作
+ */
+export type MousetrapAction = 'keypress' | 'keydown' | 'keyup';
+
+/**
  * 文件管理数据
  */
 export type FileManageOption = {
@@ -24,6 +29,11 @@ export type FileManageOption = {
 };
 
 /**
- * mousetrap键盘触发动作
+ * 来源管理节点数据
  */
-export type MousetrapAction = 'keypress' | 'keydown' | 'keyup';
+export type SourceManageOption = {
+  value: string;
+  label: string;
+  type: 'source' | 'condition' | 'value';
+  children?: Array<SourceManageOption>;
+};

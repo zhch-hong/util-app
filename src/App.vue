@@ -1,6 +1,9 @@
 <template>
   <router-view />
-  <AppAsideComponents />
+  <!-- 独立的组件 -->
+  <teleport to="#app">
+    <AppAsideComponents />
+  </teleport>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';

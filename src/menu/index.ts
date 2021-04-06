@@ -3,6 +3,7 @@ import mousetrap from 'mousetrap';
 import about from './Help/About';
 import options from './File/Options';
 import file from './Config/File';
+import source from './Config/Source';
 // export { syncFile } from './Edit/SyncFile';
 // export { undo } from './Edit/Undo';
 // export { redo } from './Edit/Redo';
@@ -53,6 +54,10 @@ const template: MenuItemConstructorOptions[] = [
       {
         label: '文件管理',
         click: () => (file.value = true),
+      },
+      {
+        label: '来源管理',
+        click: () => (source.value = true),
       },
     ],
   },

@@ -4,24 +4,13 @@
   </div>
 </template>
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import electron from 'electron';
-import { TreeData } from 'element-ui/types/tree';
 
-interface TreeMeta extends TreeData {
-  uuid?: string;
-  type?: string;
-}
-
-export default Vue.extend({
+export default defineComponent({
   name: 'NodeItem',
 
-  props: {
-    treeData: {
-      type: Object as PropType<TreeMeta>,
-      required: true,
-    },
-  },
+  props: ['treeData'],
 
   methods: {
     contextmenu() {

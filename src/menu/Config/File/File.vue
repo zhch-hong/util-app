@@ -58,6 +58,8 @@ function readFile(): Array<FileManageOption> {
 }
 
 export default defineComponent({
+  name: 'File',
+
   components: {
     CellInput,
   },
