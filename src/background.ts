@@ -2,11 +2,13 @@
 
 import path from 'path';
 import fs from 'fs';
-import { app, protocol, BrowserWindow } from 'electron';
+import { app, protocol, BrowserWindow, Menu } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension from 'electron-devtools-installer';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
+
+Menu.setApplicationMenu(null);
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }]);
