@@ -46,7 +46,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { readFileText, writeFileText } from '@/utils';
-import { RowInfo, VxeTableInstance } from 'vxe-table';
+import { VxeTableInstance } from 'vxe-table';
 import pathMap from '@/app/config-files';
 import { FileManageOption } from '@/declare';
 import visible from '.';
@@ -84,7 +84,7 @@ export default defineComponent({
     handleSave() {
       // 这里不能使用this.tableData，要使用api调用获取到的数据
       const { fullData } = (this.$refs.xTable as VxeTableInstance).getTableData();
-      const data = _.cloneDeep<RowInfo[]>(fullData);
+      const data = _.cloneDeep<Record<string, unknown>[]>(fullData);
 
       data.forEach((row) => delete row['_XID']);
       writeFileText(pathMap.fileManagePath, data);
