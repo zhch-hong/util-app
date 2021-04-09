@@ -7,50 +7,35 @@
     :destroy-on-close="true"
     :close-on-click-modal="false"
   >
-    <el-tree
-      ref="elTree"
-      draggable
-      node-key="value"
-      :data="treeData"
-      :highlight-current="false"
-      :default-expand-all="false"
-      @node-drop="nodeDrop"
-    >
+    <el-tree ref="elTree" node-key="value" :data="treeData" :highlight-current="false" :default-expand-all="false">
       <template #default="{ node, data }">
-        <NodeItem
-          :tree-node="node"
-          :tree-data="data"
-          @append="append(node, data)"
-          @update="update(node, data)"
-          @remove="remove(node, data)"
-        >
+        <NodeItem :data="data" @append="append(node, data)" @update="update(node, data)" @remove="remove(node, data)">
           <!-- 来源 -->
           <span v-if="data.type === 'source'">
             <i class="el-icon-menu" style="margin-right: 2px"></i>
-            {{ node.label }}
+            {{ data.label }}
           </span>
           <!-- 条件 -->
           <span v-else-if="data.type === 'condition'">
             <i class="el-icon-s-operation" style="margin-right: 2px"></i>
-            {{ node.label }}
+            {{ data.label }}
           </span>
           <!-- 条件值 -->
           <span v-else>
             <i class="el-icon-tickets" style="margin-right: 2px"></i>
-            {{ node.label }}
+            {{ data.label }}
           </span>
         </NodeItem>
       </template>
     </el-tree>
-
-    <UpdateNode
-      :model="model"
-      :visible="updateNode"
-      :node="updateTreeData"
-      @update:visible="(v) => (updateNode = v)"
-      @submit="submit"
-    />
   </el-dialog>
+  <UpdateNode
+    :model="model"
+    :visible="updateNode"
+    :node="updateTreeData"
+    @update:visible="(v) => (updateNode = v)"
+    @submit="submit"
+  />
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
@@ -93,18 +78,6 @@ export default defineComponent({
   },
 
   methods: {
-    nodeDrop(
-      before: Record<string, unknown>,
-      after: Record<string, unknown>,
-      position: 'before' | 'after' | 'inner'
-    ): void {
-      console.log(before, after, position);
-
-      // if (before.level === 1 || after.level === 1) {
-      //   this.treeData = readFile();
-      // }
-    },
-
     append(node: Record<string, unknown>, data: Record<string, unknown>): void {
       this.model = 'append';
       this.updateTreeNode = node;

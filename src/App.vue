@@ -1,7 +1,7 @@
 <template>
   <router-view />
   <!-- 独立的组件 -->
-  <teleport to="#app">
+  <teleport to="body">
     <AppAsideComponents />
   </teleport>
 </template>
