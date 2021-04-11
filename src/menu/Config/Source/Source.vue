@@ -7,39 +7,17 @@
     :destroy-on-close="true"
     :close-on-click-modal="false"
   >
+    <NewSource />
     <el-tree ref="elTree" node-key="value" :data="treeData" :highlight-current="false" :default-expand-all="false">
-      <template #default="{ node, data }">
-        <NodeItem :data="data" @append="append(node, data)" @update="update(node, data)" @remove="remove(node, data)">
-          <!-- 来源 -->
-          <span v-if="data.type === 'source'">
-            <i class="el-icon-menu" style="margin-right: 2px"></i>
-            {{ data.label }}
-          </span>
-          <!-- 条件 -->
-          <span v-else-if="data.type === 'condition'">
-            <i class="el-icon-s-operation" style="margin-right: 2px"></i>
-            {{ data.label }}
-          </span>
-          <!-- 条件值 -->
-          <span v-else>
-            <i class="el-icon-tickets" style="margin-right: 2px"></i>
-            {{ data.label }}
-          </span>
-        </NodeItem>
+      <template #default="{ node }">
+        <NodeItem :node="node" />
       </template>
     </el-tree>
   </el-dialog>
-  <UpdateNode
-    :model="model"
-    :visible="updateNode"
-    :node="updateTreeData"
-    @update:visible="(v) => (updateNode = v)"
-    @submit="submit"
-  />
+  <UpdateNode @write="writeFile" />
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
-import _ from 'lodash';
 
 import visible from '.';
 import pathMap from '@/app/config-files';
@@ -48,6 +26,7 @@ import { SourceManageOption } from '@/declare';
 
 import NodeItem from './components/NodeItem.vue';
 import UpdateNode from './components/UpdateNode.vue';
+import NewSource from './components/NewSource.vue';
 
 function readFile(): Array<SourceManageOption> {
   return readFileText(pathMap.sourceManagePath);
@@ -59,6 +38,7 @@ export default defineComponent({
   components: {
     NodeItem,
     UpdateNode,
+    NewSource,
   },
 
   setup() {
@@ -70,77 +50,14 @@ export default defineComponent({
   data() {
     return {
       treeData: readFile(),
-      model: 'append' as 'update' | 'append',
-      updateNode: false,
-      updateTreeNode: null as Record<string, unknown> | null,
-      updateTreeData: null as Record<string, unknown> | null,
     };
   },
 
   methods: {
-    append(node: Record<string, unknown>, data: Record<string, unknown>): void {
-      this.model = 'append';
-      this.updateTreeNode = node;
-      this.updateTreeData = data;
-      this.updateNode = true;
-    },
+    writeFile() {
+      console.log(this.treeData);
 
-    update(node: Record<string, unknown>, data: Record<string, unknown>): void {
-      console.log(node);
-
-      this.model = 'update';
-      this.updateTreeNode = node;
-      this.updateTreeData = data;
-      this.updateNode = true;
-    },
-
-    remove(node: Record<string, unknown>, data: Record<string, unknown>): void {
-      const parent = node.parent as Record<string, unknown> | undefined;
-      if (!parent) return;
-
-      const nodeData = parent.data as Record<string, unknown>;
-      const children = nodeData.children || parent.data;
-      if (!Array.isArray(children)) return;
-
-      const index = children.findIndex((d) => d.value === data.value);
-      children.splice(index, 1);
-
-      const _data = this.clear(this.treeData);
-
-      writeFileText(pathMap.sourceManagePath, _data);
-    },
-
-    submit(node: Record<string, string>): void {
-      if (this.model === 'append') {
-        if (this.updateTreeData) {
-          (this.updateTreeData.children as Record<string, unknown>[]).push(node);
-        }
-      } else {
-        if (this.updateTreeNode) {
-          // this.updateTreeNode.data = node; // 这样写不会生效
-          Object.assign(this.updateTreeNode.data, node);
-        }
-      }
-
-      const _data = this.clear(this.treeData);
-
-      writeFileText(pathMap.sourceManagePath, _data);
-    },
-
-    clear(_data: Record<string, unknown>[]) {
-      const data = _.cloneDeep(_data);
-      data.forEach((item) => {
-        if (item.uuid) delete item.uuid;
-        if (item.children) {
-          if ((item.children as Record<string, unknown>[]).length === 0) {
-            delete item.children;
-          } else {
-            this.clear(item.children as Record<string, unknown>[]);
-          }
-        }
-      });
-
-      return data;
+      writeFileText(pathMap.sourceManagePath, this.treeData);
     },
   },
 });

@@ -1,7 +1,7 @@
 <template>
   <teleport to="body">
     <el-dialog
-      v-model="visiblesync"
+      v-model="updateVisible"
       :close-on-click-modal="false"
       :title="title"
       :modal="false"
@@ -10,60 +10,38 @@
       width="25vw"
       @closed="closed"
     >
-      <el-form ref="ruleForm" :model="form" :rules="rules" size="small" label-width="80px">
+      <el-form ref="ruleForm" :model="updateData" :rules="rules" size="small" label-width="80px">
         <el-form-item label="字段值" prop="value">
-          <el-input v-model="form.value"></el-input>
+          <el-input v-model="updateData.value"></el-input>
         </el-form-item>
         <el-form-item label="字段说明" prop="label">
-          <el-input v-model="form.label"></el-input>
+          <el-input v-model="updateData.label"></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button size="small" @click="visiblesync = false">取消</el-button>
+        <el-button size="small" @click="updateVisible = false">取消</el-button>
         <el-button size="small" type="primary" @click="submit">保存</el-button>
       </template>
     </el-dialog>
   </teleport>
 </template>
 <script lang="ts">
-import { computed, defineComponent, reactive, watch } from 'vue';
+import _ from 'lodash';
+import { computed, defineComponent } from 'vue';
+import { updateVisible, updateData, handlerMode, activeNode } from '..';
 
 export default defineComponent({
   name: 'UpdateNode',
 
-  props: ['model', 'data', 'visible'],
+  emits: ['write'],
 
-  emits: ['update:visible', 'submit'],
-
-  setup(props, { emit }) {
-    const form = reactive({ label: '', value: '' });
-    const setForm = () => {
-      if (props.model === 'append') {
-        form.label = '';
-        form.value = '';
-      } else {
-        form.label = props.data.label;
-        form.value = props.data.value;
-      }
-    };
-    watch([() => props.model, () => props.data], setForm, { deep: true, immediate: true });
-
-    const title = computed(() => (props.model === 'append' ? '新增字段' : '更新字段'));
-
-    const visiblesync = computed({
-      get(): boolean {
-        return props.visible;
-      },
-
-      set(value: boolean) {
-        emit('update:visible', value);
-      },
-    });
+  setup() {
+    const title = computed(() => (handlerMode.value === 'append' ? '新增字段' : '更新字段'));
 
     return {
-      form,
+      updateData,
       title,
-      visiblesync,
+      updateVisible,
     };
   },
 
@@ -82,8 +60,26 @@ export default defineComponent({
         .validate()
         .then((value) => {
           if (value) {
-            this.$emit('submit', this.form);
-            this.visiblesync = false;
+            console.log(handlerMode.value, updateData);
+
+            if (handlerMode.value === 'append') {
+              const nodeData = activeNode.value.data as Record<string, unknown>;
+              if (nodeData.children instanceof Array) {
+                nodeData.children.push(_.cloneDeep(updateData));
+              } else {
+                Object.assign(nodeData, { children: [_.cloneDeep(updateData)] });
+              }
+            }
+
+            if (handlerMode.value === 'update') {
+              const nodeData = activeNode.value.data as Record<string, unknown>;
+              nodeData.label = updateData.label;
+              nodeData.value = updateData.value;
+            }
+
+            this.$emit('write');
+
+            updateVisible.value = false;
           }
         })
         .catch(() => {
