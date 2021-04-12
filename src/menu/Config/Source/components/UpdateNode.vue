@@ -33,7 +33,7 @@ import { updateVisible, updateData, handlerMode, activeNode } from '..';
 export default defineComponent({
   name: 'UpdateNode',
 
-  emits: ['write'],
+  emits: ['submit'],
 
   setup() {
     const title = computed(() => (handlerMode.value === 'append' ? '新增字段' : '更新字段'));
@@ -60,26 +60,7 @@ export default defineComponent({
         .validate()
         .then((value) => {
           if (value) {
-            console.log(handlerMode.value, updateData);
-
-            if (handlerMode.value === 'append') {
-              const nodeData = activeNode.value.data as Record<string, unknown>;
-              if (nodeData.children instanceof Array) {
-                nodeData.children.push(_.cloneDeep(updateData));
-              } else {
-                Object.assign(nodeData, { children: [_.cloneDeep(updateData)] });
-              }
-            }
-
-            if (handlerMode.value === 'update') {
-              const nodeData = activeNode.value.data as Record<string, unknown>;
-              nodeData.label = updateData.label;
-              nodeData.value = updateData.value;
-            }
-
-            this.$emit('write');
-
-            updateVisible.value = false;
+            this.$emit('submit');
           }
         })
         .catch(() => {

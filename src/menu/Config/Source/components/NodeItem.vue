@@ -3,7 +3,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { updateData, updateVisible, handlerMode, activeNode } from '..';
+import { handlerMode } from '..';
 import electron from 'electron';
 
 export default defineComponent({
@@ -15,6 +15,8 @@ export default defineComponent({
       required: true,
     },
   },
+
+  emits: ['contextmenu'],
 
   setup(props) {
     const { label, value, type } = props.node.data as Record<string, string>;
@@ -60,21 +62,8 @@ export default defineComponent({
       return new MenuItem({
         label,
         click: () => {
-          activeNode.value = this.node;
-          if (handle !== 'remove') {
-            handlerMode.value = handle;
-            updateVisible.value = true;
-            if (handle === 'update') {
-              updateData.type = type;
-              updateData.label = this.label;
-              updateData.value = this.value;
-            } else {
-              updateData.label = '';
-              updateData.value = '';
-              if (type === 'source') updateData.type = 'condition';
-              if (type === 'condition') updateData.type = 'value';
-            }
-          }
+          handlerMode.value = handle;
+          this.$emit('contextmenu', { type, key: this.node.key });
         },
       });
     },

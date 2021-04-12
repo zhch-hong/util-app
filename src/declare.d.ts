@@ -34,6 +34,7 @@ export type FileManageOption = {
 export type SourceManageOption = {
   value: string;
   label: string;
-  type: 'source' | 'condition' | 'value';
+  type: string;
+  nodeKey?: string;
   children?: Array<SourceManageOption>;
 };
