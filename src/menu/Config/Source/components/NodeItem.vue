@@ -2,16 +2,17 @@
   <div @contextmenu.prevent.stop="contextmenu">{{ label }}</div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { handlerMode } from '..';
+import { defineComponent, PropType } from 'vue';
+import { activeNodekey, handlerMode } from '..';
 import electron from 'electron';
+import TreeNode from 'element-plus/lib/el-tree/src/model/node';
 
 export default defineComponent({
   name: 'NodeItem',
 
   props: {
     node: {
-      type: Object,
+      type: Object as PropType<TreeNode>,
       required: true,
     },
   },
@@ -63,7 +64,8 @@ export default defineComponent({
         label,
         click: () => {
           handlerMode.value = handle;
-          this.$emit('contextmenu', { type, key: this.node.key });
+          activeNodekey.value = this.node.key;
+          this.$emit('contextmenu', type);
         },
       });
     },

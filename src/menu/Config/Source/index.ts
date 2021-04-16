@@ -1,12 +1,12 @@
 import { SourceManageOption } from '@/declare';
 import { reactive, ref } from 'vue';
 import { v4 } from 'uuid';
-import TreeNode from 'element-plus/lib/el-tree/src/model/node';
+import { TreeKey } from 'element-plus/lib/el-tree/src/tree.type';
 
 export function generateNodekey(params: SourceManageOption[]) {
   params.forEach((node) => {
-    node.nodeKey = v4();
-    if (node.children && node.children.length > 0) {
+    node.key = `${node.key}[${v4()}]`;
+    if (node.children) {
       generateNodekey(node.children);
     }
   });
@@ -16,9 +16,9 @@ export function generateNodekey(params: SourceManageOption[]) {
 
 export function removeNodekey(params: SourceManageOption[]) {
   params.forEach((node) => {
-    delete node.nodeKey;
-    if (node.children && node.children.length > 0) {
-      generateNodekey(node.children);
+    node.key = node.key.slice(0, -38);
+    if (node.children) {
+      removeNodekey(node.children);
     }
   });
 
@@ -33,7 +33,7 @@ export default ref(false);
 /**
  * 当前操作的树节点，引用传递
  */
-export const activeNode = ref<TreeNode | null>(null);
+export const activeNodekey = ref<TreeKey>('');
 
 /**
  * 更新节点字段的对话框

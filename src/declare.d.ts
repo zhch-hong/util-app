@@ -1,3 +1,5 @@
+import { TreeDataItem } from 'ant-design-vue/lib/tree/Tree';
+
 /**
  * mousetrap键盘触发动作
  */
@@ -31,10 +33,8 @@ export type FileManageOption = {
 /**
  * 来源管理节点数据
  */
-export type SourceManageOption = {
-  value: string;
-  label: string;
-  type: string;
-  nodeKey?: string;
-  children?: Array<SourceManageOption>;
+export type SourceManageOption = TreeDataItem & {
+  key: string;
+  type: 'source' | 'condition' | 'value';
+  children: SourceManageOption[];
 };

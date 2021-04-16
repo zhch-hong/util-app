@@ -28,12 +28,12 @@
 <script lang="ts">
 import _ from 'lodash';
 import { computed, defineComponent } from 'vue';
-import { updateVisible, updateData, handlerMode, activeNode } from '..';
+import { updateVisible, updateData, handlerMode } from '..';
 
 export default defineComponent({
   name: 'UpdateNode',
 
-  emits: ['submit'],
+  emits: ['update-node'],
 
   setup() {
     const title = computed(() => (handlerMode.value === 'append' ? '新增字段' : '更新字段'));
@@ -60,7 +60,7 @@ export default defineComponent({
         .validate()
         .then((value) => {
           if (value) {
-            this.$emit('submit');
+            this.$emit('update-node');
           }
         })
         .catch(() => {
