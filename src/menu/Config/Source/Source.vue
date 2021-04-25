@@ -1,13 +1,19 @@
 <template>
-  <a-modal v-model:visible="visible" title="来源管理" :destroy-on-close="true" :mask-closable="false" :mask="false">
+  <a-modal
+    v-model:visible="visible"
+    title="来源管理"
+    :destroy-on-close="true"
+    :mask-closable="false"
+    :mask="false"
+    :footer="null"
+  >
     <TreeView />
   </a-modal>
 </template>
 <script lang="ts">
-import { defineComponent, ref, VNode } from 'vue';
-import { Modal } from 'ant-design-vue';
+import { defineComponent } from 'vue';
 import visible from '.';
-import TreeView from './TreeView.vue';
+import TreeView from './components/TreeView.vue';
 
 export default defineComponent({
   name: 'Source',
@@ -18,12 +24,6 @@ export default defineComponent({
     return {
       visible,
     };
-  },
-
-  methods: {
-    onclick() {
-      //
-    },
   },
 });
 </script>
