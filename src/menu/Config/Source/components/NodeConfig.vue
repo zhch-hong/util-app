@@ -5,6 +5,8 @@
     :destroy-on-close="true"
     :mask-closable="false"
     :mask="false"
+    cancelText="取消"
+    okText="保存"
     @cancel="visible = false"
     @ok="submit"
   >

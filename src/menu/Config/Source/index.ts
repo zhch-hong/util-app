@@ -1,7 +1,6 @@
 import { SourceManageOption } from '@/declare';
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
 import { v4 } from 'uuid';
-import { TreeKey } from 'element-plus/lib/el-tree/src/tree.type';
 
 export function generateuuid(params: SourceManageOption[]): SourceManageOption[] {
   params.forEach((node) => {

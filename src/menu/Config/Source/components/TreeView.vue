@@ -5,9 +5,9 @@
   <NodeConfig v-bind="configData" @node-config="writeNode" />
 
   <a-tree :tree-data="treeData" :replaceFields="{ key: 'uuid' }">
-    <template #title="{ key, title, type, dataRef }">
+    <template #title="{ title, type, dataRef }">
       <a-dropdown :trigger="['contextmenu']">
-        <span>{{ title }}[{{ key }}]</span>
+        <span>{{ title }}</span>
         <template #overlay>
           <a-menu @click="({ key: menuKey }) => onContextMenuClick(menuKey, dataRef)">
             <template v-if="type === 'source'">
@@ -111,8 +111,6 @@ export default defineComponent({
     },
 
     writeNode(data: Record<'key' | 'title', string>) {
-      console.log(handlerMode.value, activeNode.value?.type);
-
       if (handlerMode.value === 'append') {
         if (activeNode.value === null) {
           // 添加来源
