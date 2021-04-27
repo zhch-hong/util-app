@@ -4,6 +4,7 @@ import about from './Help/About';
 import options from './File/Options';
 import file from './Config/File';
 import source from './Config/Source';
+import { inputReceive, inputEnumerate, inputAsset } from './Config/Input';
 // export { syncFile } from './Edit/SyncFile';
 // export { undo } from './Edit/Undo';
 // export { redo } from './Edit/Redo';
@@ -58,6 +59,23 @@ const template: MenuItemConstructorOptions[] = [
       {
         label: '来源管理',
         click: () => (source.value = true),
+      },
+      {
+        label: '输入项管理',
+        submenu: [
+          {
+            label: '获得类型',
+            click: inputReceive,
+          },
+          {
+            label: '枚举类型',
+            click: inputEnumerate,
+          },
+          {
+            label: '资产类型',
+            click: inputAsset,
+          },
+        ],
       },
     ],
   },

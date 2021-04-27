@@ -3,6 +3,7 @@
   <About />
   <FileManage />
   <SourceManage />
+  <InputManage />
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
@@ -15,6 +16,8 @@ import About from '@/menu/Help/About/About.vue';
 import FileManage from '@/menu/Config/File/File.vue';
 // 配置-来源管理
 import SourceManage from '@/menu/Config/Source/Source.vue';
+// 配置-输入项管理
+import InputManage from '@/menu/Config/Input/Input.vue';
 
 export default defineComponent({
   components: {
@@ -22,6 +25,7 @@ export default defineComponent({
     About,
     FileManage,
     SourceManage,
+    InputManage,
   },
 });
 </script>

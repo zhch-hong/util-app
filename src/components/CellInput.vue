@@ -17,6 +17,8 @@
 import { computed, defineComponent, ref } from 'vue';
 
 export default defineComponent({
+  name: 'CellInput',
+
   props: {
     modelValue: {
       type: String,
@@ -24,7 +26,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'enter'],
 
   directives: {
     focus: {
@@ -58,6 +60,7 @@ export default defineComponent({
   methods: {
     submit(): void {
       this.$emit('update:modelValue', this.currentValue);
+      this.$emit('enter');
       this.edit = false;
     },
   },

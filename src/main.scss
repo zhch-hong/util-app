@@ -32,6 +32,11 @@ body {
   color: black;
 }
 
+/* custom-electron-titlebar */
+.menubar-menu-container {
+  overflow-y: visible !important;
+}
+
 /* Button */
 button.el-button {
   font-family: inherit;
