@@ -12,22 +12,22 @@ const pathMap = {
 Object.defineProperties(pathMap, {
   fileManagePath: {
     get(): string {
-      return path.resolve(configFolder, 'app_config', 'file-manage.json');
+      return path.resolve(configFolder, 'file-manage.json');
     },
   },
   inputManagePath: {
     get(): string {
-      return path.resolve(configFolder, 'app_config', 'input-manage.json');
+      return path.resolve(configFolder, 'input-manage.json');
     },
   },
   sourceManagePath: {
     get(): string {
-      return path.resolve(configFolder, 'app_config', 'source-manage.json');
+      return path.resolve(configFolder, 'source-manage.json');
     },
   },
   templateManagePath: {
     get(): string {
-      return path.resolve(configFolder, 'app_config', 'template-manage.json');
+      return path.resolve(configFolder, 'template-manage.json');
     },
   },
 });
